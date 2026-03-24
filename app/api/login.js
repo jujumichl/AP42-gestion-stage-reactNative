@@ -9,9 +9,9 @@ export async function postConnexion(email, mdp) {
         body: JSON.stringify({ login: email, password: mdp })
     }
 
+    console.log(`API : POST ${monUrlBase}/login - ` + JSON.stringify(settings));
     let response = await fetch(`${monUrlBase}/login`, settings);
 
-    console.log(`API : POST ${monUrlBase}/login - ` + JSON.stringify(settings));
     const body = await response.json();
     if (response.status === 401 && body.message !== null) {
         throw new Error(`Connexion - Identifiants erronés`);
