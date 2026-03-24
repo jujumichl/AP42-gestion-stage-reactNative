@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useAuth } from '../AuthProvider';
+import { useAuth } from '../context/AuthProvider';
 import ConnexionScreen from '../screens/ConnexionScreen';
 import MainTabNav from './MainTabNav';
 

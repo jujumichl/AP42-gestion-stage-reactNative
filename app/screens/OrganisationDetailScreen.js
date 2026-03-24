@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { StyleSheet, View, ScrollView, Text, TextInput, Button } from 'react-native';
-import { useAuth } from '../AuthProvider';
+import { useAuth } from '../context/AuthProvider';
 import { putOrganisation } from '../api/organisations';
 
 export default function OrganisationDetailScreen({ route }) {

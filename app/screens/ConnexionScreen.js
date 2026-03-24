@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { useAuth } from '../AuthProvider';
+import { useAuth } from '../context/AuthProvider';
 
 export default function ConnexionScreen () {
     const [email, setEmail] = useState('');

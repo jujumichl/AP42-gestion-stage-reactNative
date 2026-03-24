@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext } from 'react';
-import { postConnexion } from './api/login';
+import { postConnexion } from '../api/login';
 
 // 1. Création du contexte
 const AuthContext = createContext();

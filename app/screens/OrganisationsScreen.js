@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { useAuth } from '../AuthProvider';
+import { useAuth } from '../context/AuthProvider';
 import { getOrganisations } from '../api/organisations';
 
 export default function OrganisationsScreen() {
