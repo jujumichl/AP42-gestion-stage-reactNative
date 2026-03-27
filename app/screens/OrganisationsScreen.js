@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { View, StyleSheet, FlatList } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '../context/AuthProvider';
 import { getOrganisations } from '../api/organisations';
+import ItemOrganisation from '../components/ItemOrganisation';
 
 export default function OrganisationsScreen() {
     const [listeOrganisations, setListeOrganisations] = useState([]);
-    const navigation = useNavigation();
     const {user} = useAuth();
 
     // callback appelée à chaque fois que l'écran reçoit le focus
@@ -33,21 +33,13 @@ export default function OrganisationsScreen() {
         return () => {}; 
       }, []) 
     );
-
-    const renderItem = ({ item }) => (
-        <TouchableOpacity onPress={() => navigation.navigate('OrganisationDetail', { organisation: item })}>
-            <View style={styles.card}>
-              <Text style={styles.nom}>{item.nom}</Text>            
-              <Text style={styles.details}>{item.ville}</Text>   
-            </View>
-        </TouchableOpacity>
-    );    
+   
     return (
         <View style={styles.container}>
           <FlatList
             data={listeOrganisations}
             keyExtractor={item => item.id.toString()}
-            renderItem={renderItem}
+            renderItem={({item}) => (<ItemOrganisation itemOrga={item} />)}
             contentContainerStyle={{ paddingBottom: 20 }}
           />
         </View>
@@ -59,22 +51,5 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     padding: 8,
-  },
-  card: {
-    flexDirection: 'column',
-    backgroundColor: '#F5F5F5',
-    borderRadius: 10,
-    marginVertical: 8,
-    padding: 10,
-    elevation: 2,
-  },
-  nom: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 4,
-  },
-  details: {
-    fontSize: 12,
-    color: '#666',
   },
 });
