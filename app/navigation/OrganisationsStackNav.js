@@ -10,13 +10,14 @@ export default function OrganisationsStack() {
 
   return (
     <Stack.Navigator
-      screenOptions={{
+      screenOptions={({ route }) => ({ 
         headerStyle: { backgroundColor: '#3b5bdb' },
         headerTintColor: '#fff',
         headerTitleStyle: { fontWeight: 'bold', fontSize: 15 },
-      }}
+        title: route.name + " - " + user.email
+    })}
     >
-      <Stack.Screen name={"Organisations - " + user.email} component={OrganisationsScreen} />
+      <Stack.Screen name="Organisations" component={OrganisationsScreen} />
       <Stack.Screen name="OrganisationDetail" component={OrganisationDetailScreen} />
     </Stack.Navigator>
   );
