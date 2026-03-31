@@ -16,7 +16,7 @@ export default function OrganisationsStack() {
         headerTitleStyle: { fontWeight: 'bold', fontSize: 15 },
       }}
     >
-      <Stack.Screen name={"Organisations - " + user.email} component={OrganisationsScreen} initialParams={user.email} />
+      <Stack.Screen name={"Organisations - " + user.email} component={OrganisationsScreen} />
       <Stack.Screen name="OrganisationDetail" component={OrganisationDetailScreen} />
     </Stack.Navigator>
   );
