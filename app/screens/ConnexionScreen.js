@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { useAuth } from '../context/AuthProvider';
 
-export default function ConnexionScreen () {
+export default function ConnexionScreen() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const {login} = useAuth();
-    
+    const { login } = useAuth();
+
     async function handleSignIn() {
         if (!email || !password) {
             alert('Veuillez entrer un email et un mot de passe');
@@ -14,7 +14,7 @@ export default function ConnexionScreen () {
         }
         try {
             await login(email, password);
-        } 
+        }
         catch (error) {
             console.log(`Erreur réseau : ${error}`);
             alert('Erreur de connexion');
@@ -36,7 +36,12 @@ export default function ConnexionScreen () {
                 secureTextEntry={true}
                 onChangeText={setPassword}
             />
-            <Button title="Sign In" onPress={handleSignIn} />
+            <Button
+                style={styles.signIn}
+                title="Sign In"
+                onPress={handleSignIn}
+                disabled={email.length == 0 || password.length == 0}
+            />
         </View>
     );
 };
