@@ -40,6 +40,12 @@ export default function OrganisationsScreen() {
     await Linking.openURL(url);
   };
 
+  const ouvrirLien = async (urlSiteWeb) => {
+    if (!urlSiteWeb) return;
+    const url = urlSiteWeb;
+    await Linking.openURL(url);
+  }
+
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => navigation.navigate('OrganisationDetail', { organisation: item })}>
       <View style={styles.card}>
@@ -54,6 +60,11 @@ export default function OrganisationsScreen() {
             <Text style={[styles.details, { color: '#007AFF', textDecorationLine: 'underline'}]}>{item.tel}</Text>
           </TouchableOpacity>
         ) : null}
+        {item.urlSiteWeb ? (
+          <TouchableOpacity onPress={() => ouvrirLien(item.urlSiteWeb)}>
+            <Text style={[styles.details, { color: '#007AFF', textDecorationLine: 'underline'}]}>{item.urlSiteWeb}</Text>
+          </TouchableOpacity>
+        ): null}
       </View>
     </TouchableOpacity>
   );
@@ -86,19 +97,20 @@ const styles = StyleSheet.create({
   },
   nom: {
     fontSize: 18,
-    width: 200,
+    width: 230,
     fontWeight: 'bold',
     marginBottom: 4,
   },
   adresse: {
     position: 'absolute',
     marginTop: 25,
-    marginLeft: 230,
-    width: 80,
+    marginLeft: 250,
+    width: 70,
   },
   details: {
     fontSize: 12,
     width: 150,
     color: '#666',
+    marginTop: 3,
   },
 });
