@@ -54,12 +54,12 @@ export default function MainTabNav() {
         options={{
           tabBarLabel: 'Logout',
           headerShown: false,
-          tabBarButton: () => (
-            <TouchableOpacity
-              onPress={logout}
-              style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+          tabBarButton: () => ( // Permet d'intercepter le clique sur le boutton
+            <TouchableOpacity // On remplace par une zone cliquable
+              onPress={logout} // effectuer la déconnection (cf AuthProvider.js)
+              style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} // Style
             >
-              <Text style={{ color: '#e03131', fontSize: 12 }}>Logout</Text>
+              <Text style={{ color: '#e03131', fontSize: 12 }}>Logout</Text> 
             </TouchableOpacity>
           ),
         }}
