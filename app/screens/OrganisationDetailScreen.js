@@ -1,9 +1,13 @@
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, ScrollView, Text, TextInput, Button, FlatList } from 'react-native';
 import { useAuth } from '../context/AuthProvider';
-import { putOrganisation, getOrganisationContacts } from '../api/organisations';
+import { putOrganisation } from '../api/organisations';
+import { useFocusEffect } from '@react-navigation/native';
+import { get } from 'react-native/Libraries/NativeComponent/NativeComponentRegistry';
+import { getContact } from '../api/contacts';
 
 export default function OrganisationDetailScreen({ route }) {
+  const [listeContacts, setListeContacts] = useState([]);
   const organisation = route.params.organisation;
   const [rue, setRue] = useState(organisation.rue);
   const [ville, setVille] = useState(organisation.ville);
@@ -14,7 +18,37 @@ export default function OrganisationDetailScreen({ route }) {
 
   const { user, logout } = useAuth();
 
-  const [contacts, setContacts] = useState(organisation.contacts);
+  // callback appelée à chaque fois que l'écran reçoit le focus
+  useFocusEffect(
+    React.useCallback(() => {
+      async function fetchData() {
+        const token = user.token;
+        try {
+          let body = await getContact(token, organisation.id);
+          setListeContacts(body.data);
+        }
+        catch (error) {
+          console.log(`OrganisationsDetailScreen - Erreur lors de la récupération des contacts : ${error}`);
+          if (error.cause === 401) {
+            alert(`Connexion échue. Il faut vous reconnecter`);
+            logout();
+          }
+        }
+      }
+      fetchData();
+      // Optionnel : une fonction de nettoyage si nécessaire
+      return () => { };
+    }, [])
+  );
+
+  const renderItem = ({ item }) => (
+    <View>
+      <Text style={styles.details}>Nom : {item.nom}</Text>
+      <Text style={styles.details}>Prénom : {item.prenom}</Text>
+      <Text style={styles.details}>Email : {item.email}</Text>
+      <Text style={styles.details}>Téléphone : {item.tel}</Text>
+    </View>
+  );
 
   async function validerOrganisation() {
     let unBody = {};
@@ -31,31 +65,8 @@ export default function OrganisationDetailScreen({ route }) {
       return;
     }
 
-    async function contactOrganisation() {
-      try {
-        const body = await getContact(token);
-        console.log(`OrganisationDetailScreen - Contact de l'organisation : ${body.message}`);
-        setContacts(body.contacts);
-      }
-      catch (error) {
-        console.log(`OrganisationDetailScreen - Erreur lors de la récupération des contacts de l'organisation : ${error}`);
-        if (error.cause === 401) {
-          alert(`Connexion échue. Il faut vous reconnecter`);
-          logout();
-        }
-      }
-    };
     // récupération du jeton stocké dans la mémoire asynchrone
     const token = user.token;
-
-    const renderItem = ({ item }) => (
-      <View>
-        <Text style={styles.details}>Nom : {item.nom}</Text>
-        <Text style={styles.details}>Prénom : {item.prenom}</Text>
-        <Text style={styles.details}>Email : {item.email}</Text>
-        <Text style={styles.details}>Téléphone : {item.tel}</Text>
-      </View>
-    );
 
     // demande de modification de l'organisation fournie
     try {
@@ -68,6 +79,7 @@ export default function OrganisationDetailScreen({ route }) {
       organisation.tel = unBody.tel;
       organisation.email = unBody.email;
       organisation.urlSiteWeb = unBody.urlSiteWeb;
+      await contactOrganisation();
     }
     catch (error) {
       console.log(`OrganisationDetailScreen - Erreur lors de la modification de l'organisation : ${error}`);
@@ -78,8 +90,8 @@ export default function OrganisationDetailScreen({ route }) {
     }
   };
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.formCard}>
+    <View contentContainerStyle={styles.container}>
+      <ScrollView style={styles.formCard}>
         <Text style={styles.title}>{organisation.nom}</Text>
 
         { /* Champ adresse */}
@@ -136,18 +148,18 @@ export default function OrganisationDetailScreen({ route }) {
           />
         </View>
         <Button style={styles.modifier} title="Modifier" onPress={validerOrganisation} />
-      </View>
-      <View style={styles.formCard}>
-        <Text style={styles.titleContact}>Contact de l'entreprise : {organisation.nom}</Text>
         <View>
-          <FlatList
-            data={contacts}
-            keyExtractor={(item) => item.id.toString()}
+          <FlatList nestedScrollEnabled 
+            data={listeContacts}
+            keyExtractor={(item, index) => item.id?.toString() || index.toString()}
             renderItem={renderItem}
+            ListEmptyComponent={<Text style={styles.details}>Aucun contact trouvé.</Text>}
           />
-        </View>
       </View>
-    </ScrollView>
+      </ScrollView>
+      
+    </View>
+
   );
 }
 
@@ -156,6 +168,7 @@ const styles = StyleSheet.create({
     padding: 16,
     alignItems: 'center',
     backgroundColor: 'white',
+    flex: 1,
     justifyContent: 'center',
   },
   formCard: {

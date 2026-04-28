@@ -20,7 +20,7 @@ export async function getOrganisations(token) {
     return body;
 }
 
-async function getOrganisationContacts(token, id) {
+export async function getOrganisationContacts(token, id) {
     const settings = {
         method: 'GET',
         headers: {
