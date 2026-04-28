@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import OrganisationsStackNav from './OrganisationsStackNav';
 import ContactsScreen from '../screens/ContactsScreen';
-import StagesScreen from '../screens/StagesScreen';
+import StagesStackNav from './StagesStackNav';
 
 const Tab = createBottomTabNavigator();
 
@@ -35,10 +35,10 @@ export default function MainTabNav () {
         />
         <Tab.Screen
           name="StagesTab"
-          component={StagesScreen}
+          component={StagesStackNav}
           options={{
             tabBarLabel: 'Stages',
-            headerShown: true,
+            headerShown: false,
             headerStyle: { backgroundColor: '#3b5bdb' },
             headerTintColor: '#fff',
             headerTitle: 'Stages',
