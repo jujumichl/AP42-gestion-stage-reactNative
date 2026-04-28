@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
 import { useAuth } from '../context/AuthProvider';
 
 export default function ConnexionScreen () {
@@ -36,7 +36,22 @@ export default function ConnexionScreen () {
                 secureTextEntry={true}
                 onChangeText={setPassword}
             />
-            <Button title="Sign In" onPress={handleSignIn} />
+            <Pressable
+                style={({ pressed }) => [
+                    {
+                        backgroundColor: (email.length === 0 || password.length === 0)
+                            ? '#cccccc'
+                            : pressed
+                                ? '#2374ec' 
+                                : '#3232ff' 
+                    },
+                    styles.signIn
+                ]}
+                onPress={handleSignIn}
+                disabled={email.length == 0 || password.length == 0}>
+                <Text style={styles.signInText}>Sign In</Text>
+            </Pressable>
+
         </View>
     );
 };
@@ -58,5 +73,17 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginBottom: 15,
         paddingHorizontal: 10,
+    },
+    signIn: {
+        backgroundColor: `#3232ff`,
+        height: 30,
+        width: 75,
+    },
+    signIn: {
+        height: 30,
+        width: 75,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
     },
 });

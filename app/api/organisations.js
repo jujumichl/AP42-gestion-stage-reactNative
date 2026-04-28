@@ -30,7 +30,7 @@ export async function putOrganisation(token, id, unBody) {
         body: JSON.stringify(unBody)
     }
 
-    console.log(`API : PUT ${monUrlBase}/organisations - ` + JSON.stringify(settings));
+    console.log(`API : PUT ${monUrlBase}/organisations/${id} - ` + JSON.stringify(settings));
     let response = await fetch(`${monUrlBase}/organisations/${id}`, settings);
     console.log(`API : PUT ${monUrlBase}/organisations - code statut ${response.status}`);
     const body = await response.json();
