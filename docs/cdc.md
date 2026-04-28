@@ -42,7 +42,7 @@ Afficher le login (email) de l'étudiant dans la barre d'entête de l’applicat
 #### EXG-04 *
 Donner la possibilité à l'utilisateur de se déconnecter à partir de tout écran, excepté celui de connexion. C'est l'écran de connexion qui s'affichera une fois la déconnexion réalisée.
 
-#### EXG-06 *
+#### EXG-05 *
 Dans le formulaire d'authentification, désactiver le bouton Valider lorsque login et mot de passe ne sont pas tous les 2 renseignés. Contrôler le bon domaine de valeurs des login et mot de passe : longueur et format.
 
 #### EXG-10 **
@@ -87,7 +87,7 @@ Le projet est découpé en plusieurs milestones successifs.
 ** Dans chacun des milestones 1 et 2, chaque membre de l’équipe aura la responsabilité d’une exigence fonctionnelle. **
 
 ### Milestone n° 1 - 8h
-- EXG-Stages-01 à EXG-Stage06
+- EXG-Stages-01 à EXG-Stage05
 - Productions attendues :
   - Version 1.1 de l'application mobile intégrant les exigences fonctionnelles ci-dessous, et des éventuels impacts sur l'API-REST.
   - Documentation technique de chaque exigence fonctionnelle analysant les impacts sur l'application mobile en termes d'interface utilisateur sur les layouts, de logique applicative sur les composants JSX et d'invocation de l'API-REST sur les composants api.

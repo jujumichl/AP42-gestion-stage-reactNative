@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '../context/AuthProvider';
 import { getOrganisations } from '../api/organisations';
+import ItemOrganisation from '../components/ItemOrganisation';
 
 export default function OrganisationsScreen() {
   const [listeOrganisations, setListeOrganisations] = useState([]);
