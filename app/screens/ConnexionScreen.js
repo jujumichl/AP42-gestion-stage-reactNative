@@ -3,7 +3,7 @@ import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
 import { useAuth } from '../context/AuthProvider';
 
 export default function ConnexionScreen () {
-    const [email, setEmail] = useState('');
+    const [email, setEmail] = useState(''); 
     const [password, setPassword] = useState('');
     const {login} = useAuth();
     
