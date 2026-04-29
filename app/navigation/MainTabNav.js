@@ -1,15 +1,21 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { TouchableOpacity, Text } from 'react-native';
+
 import OrganisationsStackNav from './OrganisationsStackNav';
+
 import ContactsScreen from '../screens/ContactsScreen';
 import StagesScreen from '../screens/StagesScreen';
-import { useAuth } from '../context/AuthProvider';
 import ConnexionScreen from '../screens/ConnexionScreen';
-import { TouchableOpacity, Text } from 'react-native';
+
+import { useAuth } from '../context/AuthProvider';
+import HeaderSubTitle from '../components/headerTitle';
+
 
 const Tab = createBottomTabNavigator();
 
 export default function MainTabNav() {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -34,7 +40,7 @@ export default function MainTabNav() {
           headerShown: true,
           headerStyle: { backgroundColor: '#3b5bdb' },
           headerTintColor: '#fff',
-          headerTitle: 'Contacts',
+          headerTitle: () => <HeaderSubTitle routeName="Contacts" user={user} />,
         }}
       />
       <Tab.Screen
@@ -45,7 +51,7 @@ export default function MainTabNav() {
           headerShown: true,
           headerStyle: { backgroundColor: '#3b5bdb' },
           headerTintColor: '#fff',
-          headerTitle: 'Stages',
+          headerTitle: () => <HeaderSubTitle routeName="Stages" user={user} />,
         }}
       />
       <Tab.Screen
