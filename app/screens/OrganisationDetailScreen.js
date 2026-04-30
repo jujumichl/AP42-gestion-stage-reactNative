@@ -8,6 +8,10 @@ export default function OrganisationDetailScreen({ route }) {
   const [rue, setRue] = useState(organisation.rue);
   const [ville, setVille] = useState(organisation.ville);
   const [codePostal, setCodePostal] = useState(organisation.codePostal);
+  const [tel, setTel] = useState(organisation.tel);
+  const [email, setEmail] = useState(organisation.email);
+  const [urlSiteWeb, setUrlSiteWeb] = useState(organisation.urlSiteWeb);
+
   const {user, logout} = useAuth();
 
     async function validerOrganisation () {
@@ -16,7 +20,9 @@ export default function OrganisationDetailScreen({ route }) {
     if (organisation.rue !== rue) unBody.rue = rue;
     if (organisation.ville !== ville) unBody.ville = ville;
     if (organisation.codePostal !== codePostal) unBody.codePostal = codePostal;
-    if ( Object.keys(unBody).length === 0) {
+    if (organisation.tel !== tel) unBody.tel= tel;
+    if (organisation.email !== email) unBody.email= email;
+    if (organisation.urlSiteWeb !== urlSiteWeb) unBody.urlSiteWeb= urlSiteWeb;    if ( Object.keys(unBody).length === 0) {
         alert('Aucune modification observée');
         console.log('OrganisationDetailScreen - Aucune modification observée');
         return;
@@ -32,6 +38,9 @@ export default function OrganisationDetailScreen({ route }) {
         organisation.rue = unBody.rue;
         organisation.ville = unBody.ville;
         organisation.codePostal = unBody.codePostal;
+        organisation.tel = unBody.tel;
+        organisation.email = unBody.email;
+        organisation.urlSiteWeb = unBody.urlSiteWeb;
     }
     catch (error) {
         console.log(`OrganisationDetailScreen - Erreur lors de la modification de l'organisation : ${error}`);
@@ -72,6 +81,31 @@ export default function OrganisationDetailScreen({ route }) {
                   placeHolder='Rennes' 
                   value={ville} 
                   onChangeText={setVille} 
+              />
+            </View>
+            { /* Champ téléphone */ }
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>Téléphone</Text>
+              <TextInput style={styles.details} 
+                  placeHolder='0123456789' 
+                  value={tel} 
+                  onChangeText={setTel} 
+              />
+            </View>{ /* Champ email */ }
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>Email</Text>
+              <TextInput style={styles.details} 
+                  placeHolder='nom.prenom@exemple.com' 
+                  value={email} 
+                  onChangeText={setEmail} 
+              />
+            </View>{ /* Champ Url Site Web */ }
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>Url Site Web</Text>
+              <TextInput style={styles.details} 
+                  placeHolder='urlSiteWeb' 
+                  value={urlSiteWeb} 
+                  onChangeText={setUrlSiteWeb} 
               />
             </View>
             <Button title="Modifier" onPress={validerOrganisation} />
