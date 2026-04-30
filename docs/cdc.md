@@ -45,6 +45,9 @@ Donner la possibilité à l'utilisateur de se déconnecter à partir de tout éc
 #### EXG-05 *
 Dans le formulaire d'authentification, désactiver le bouton Valider lorsque login et mot de passe ne sont pas tous les 2 renseignés. Contrôler le bon domaine de valeurs des login et mot de passe : longueur et format.
 
+#### EXG-06 *
+Affecter un icône pour chacun des onglets de navigation Organisations, Contacts et Stages.
+
 #### EXG-10 **
 Visualiser la liste des contacts d'une organisation donnée avec ajout possible d'un nouveau contact.
 
