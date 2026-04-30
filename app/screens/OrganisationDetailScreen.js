@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, ScrollView, Text, TextInput, Button, FlatList } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+import { StyleSheet, View, KeyboardAvoidingView, Text, FlatList, Button } from 'react-native';
+import HeaderInput from '../components/organisationComponents/HeaderInput';
+import ContactsOrganisation from '../components/organisationComponents/ContactsOrganisation';
+
 import { useAuth } from '../context/AuthProvider';
 import { putOrganisation } from '../api/organisations';
-import { useFocusEffect } from '@react-navigation/native';
-import { get } from 'react-native/Libraries/NativeComponent/NativeComponentRegistry';
-import { getContact } from '../api/contacts';
+import { getContactsOrganisation } from '../api/contacts';
 
 export default function OrganisationDetailScreen({ route }) {
   const [listeContacts, setListeContacts] = useState([]);
@@ -24,7 +26,7 @@ export default function OrganisationDetailScreen({ route }) {
       async function fetchData() {
         const token = user.token;
         try {
-          let body = await getContact(token, organisation.id);
+          let body = await getContactsOrganisation(token, organisation.id);
           setListeContacts(body.data);
         }
         catch (error) {
@@ -41,15 +43,8 @@ export default function OrganisationDetailScreen({ route }) {
     }, [])
   );
 
-  const renderItem = ({ item }) => (
-    <View>
-      <Text style={styles.details}>Nom : {item.nom}</Text>
-      <Text style={styles.details}>Prénom : {item.prenom}</Text>
-      <Text style={styles.details}>Email : {item.email}</Text>
-      <Text style={styles.details}>Téléphone : {item.tel}</Text>
-    </View>
-  );
-
+  // récupération du jeton stocké dans la mémoire asynchrone
+  const token = user.token;
   async function validerOrganisation() {
     let unBody = {};
     // regroupement des données à modifier, puis appel API-REST
@@ -64,11 +59,6 @@ export default function OrganisationDetailScreen({ route }) {
       console.log('OrganisationDetailScreen - Aucune modification observée');
       return;
     }
-
-    // récupération du jeton stocké dans la mémoire asynchrone
-    const token = user.token;
-
-    // demande de modification de l'organisation fournie
     try {
       const body = await putOrganisation(token, organisation.id, unBody);
       console.log(`OrganisationDetailScreen - Modification enregistrée : ${body.message}`);
@@ -79,7 +69,8 @@ export default function OrganisationDetailScreen({ route }) {
       organisation.tel = unBody.tel;
       organisation.email = unBody.email;
       organisation.urlSiteWeb = unBody.urlSiteWeb;
-      await contactOrganisation();
+      // If you want to refresh contacts after update, call fetchData or similar here if needed
+      // await contactOrganisation(); // Uncomment and implement if needed
     }
     catch (error) {
       console.log(`OrganisationDetailScreen - Erreur lors de la modification de l'organisation : ${error}`);
@@ -88,91 +79,42 @@ export default function OrganisationDetailScreen({ route }) {
         logout();
       }
     }
-  };
+  }
   return (
-    <View contentContainerStyle={styles.container}>
-      <ScrollView style={styles.formCard}>
-        <Text style={styles.title}>{organisation.nom}</Text>
+    <KeyboardAvoidingView
+      style={styles.keyboardContainer}
+    >
+      <FlatList
+        style={styles.list}
+        data={listeContacts}
+        keyExtractor={(item, index) => item.id?.toString() || index.toString()}
+        ListHeaderComponent={
+          <View>
+            <HeaderInput organisation={organisation} />
+            <Button title="Modifier" onPress={validerOrganisation} />
+            <Text style={styles.titleContact}>Contacts associés</Text>
+            <ContactsOrganisation contact={Object.entries(listeContacts)}/>
+          </View>
+        }
 
-        { /* Champ adresse */}
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Adresse</Text>
-          <TextInput style={styles.details}
-            placeHolder="100 boulevard de l'Europe"
-            value={rue}
-            onChangeText={setRue}
-          />
-        </View>
-
-        { /* Champ code postal */}
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Code postal</Text>
-          <TextInput style={styles.details}
-            placeHolder='35200'
-            value={codePostal}
-            onChangeText={setCodePostal}
-          />
-        </View>
-        { /* Champ ville */}
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Ville</Text>
-          <TextInput style={styles.details}
-            placeHolder='Rennes'
-            value={ville}
-            onChangeText={setVille}
-          />
-        </View>
-        { /* Champ téléphone */}
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Téléphone</Text>
-          <TextInput style={styles.details}
-            placeHolder='0123456789'
-            value={tel}
-            onChangeText={setTel}
-          />
-        </View>{ /* Champ email */}
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Email</Text>
-          <TextInput style={styles.details}
-            placeHolder='nom.prenom@exemple.com'
-            value={email}
-            onChangeText={setEmail}
-          />
-        </View>{ /* Champ Url Site Web */}
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Url Site Web</Text>
-          <TextInput style={styles.details}
-            placeHolder='https://www.exemple.com'
-            value={urlSiteWeb}
-            onChangeText={setUrlSiteWeb}
-          />
-        </View>
-        <Button style={styles.modifier} title="Modifier" onPress={validerOrganisation} />
-        <View>
-          <FlatList nestedScrollEnabled 
-            data={listeContacts}
-            keyExtractor={(item, index) => item.id?.toString() || index.toString()}
-            renderItem={renderItem}
-            ListEmptyComponent={<Text style={styles.details}>Aucun contact trouvé.</Text>}
-          />
-      </View>
-      </ScrollView>
-      
-    </View>
-
+        ListEmptyComponent={<Text style={styles.details}>Aucun contact trouvé.</Text>}
+        contentContainerStyle={styles.container} // Le style s'applique ici maintenant
+      />
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
+  keyboardContainer: {
+    flex: 1,
+  },
+  list: {
+    flex: 1,
+  },
   container: {
     padding: 16,
-    alignItems: 'center',
+
     backgroundColor: 'white',
-    flex: 1,
-    justifyContent: 'center',
-  },
-  formCard: {
-    width: '80%'
   },
   nom: {
     fontSize: 24,
@@ -183,17 +125,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 12,
     color: '#444',
-    textAlign: 'center',
-  },
-  details: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 4,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
     textAlign: 'center',
   },
   inputGroup: {
@@ -210,6 +141,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     fontSize: 16,
+    color: '#666',
   },
   titleContact: {
     fontSize: 24,
@@ -217,5 +149,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
     marginTop: 50,
+  },
+  contactItem: {
+    padding: 15,
+    borderWidth: 1,
+    borderColor: '#eee',
+    borderRadius: 8,
+    marginBottom: 10,
+    width: '100%',
+    backgroundColor: '#f9f9f9',
   }
 });
