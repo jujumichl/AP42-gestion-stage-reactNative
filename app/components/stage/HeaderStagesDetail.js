@@ -13,40 +13,41 @@ export default function HeaderStagesDetail({ stage }) {
     }
     return (
         <View style={styles.formCard}>
-          <Text style={styles.label}>Description</Text>
-          <Text style={styles.details}>{stage.descriptifMissions}</Text>
+          <Text style={styles.title}>Informations</Text>
+          <Text style={styles.label}>Description : </Text>
+          <Text style={styles.details}>{stage.descriptifMissions ?? "Aucune rue renseignée"}</Text>
 
           { /* Champ adresse */}
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Adresse</Text>
-            <Text style={styles.details}>{stage.organisation.rue}, {stage.organisation.codePostal} {stage.organisation.ville}</Text>
+            <Text style={styles.label}>Adresse : </Text>
+            <Text style={styles.details}>{stage.organisation.rue ?? "Aucune rue renseignée"}, {stage.organisation.codePostal ?? "Aucun code postal renseigné"} {stage.organisation.ville ?? "Aucune ville renseignée"}</Text>
           </View>
 
           { /* Champ Période */}
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Période</Text>
-            <Text style={styles.details}>Du {dateDebut} au {dateFin}</Text>
+            <Text style={styles.label}>Période : </Text>
+            <Text style={styles.details}>Du {dateDebut ?? "Aucune date de début renseignée"} au {dateFin ?? "Aucune date de fin renseignée"}</Text>
           </View>
 
           { /* Champ Informations */}
           <View style={styles.inputGroup}>
 
             <Text style={styles.label}>Numéros de Téléphone : </Text>
-            <Text style={styles.details}>{stage.organisation.tel}</Text>
+            <Text style={styles.details}>{stage.organisation.tel ?? "Aucun numéro de téléphone renseigné"}</Text>
 
             <Text style={styles.label}>Email : </Text>
-            <Text style={styles.details}>{stage.organisation.email}</Text>
+            <Text style={styles.details}>{stage.organisation.email ?? "Aucun email renseigné"}</Text>
 
             <Text style={styles.label}>Site Web : </Text>
-            <Text style={styles.details}>{stage.organisation.urlSiteWeb}</Text>
+            <Text style={styles.details}>{stage.organisation.urlSiteWeb ?? "Aucun site web renseigné"}</Text>
           </View>
 
-          <Text style={styles.title}>Compétences exploitée</Text>
+          <Text style={styles.title}>Compétences exploitées</Text>
           
           <View style={styles.row}>
             <Text style={styles.cell}>Numéros</Text>
             <Text style={styles.cell}>Libelle</Text>
-            <Text style={styles.cell}>Spécialitée</Text>
+            <Text style={styles.cell}>Spécialité</Text>
           </View>
         </View>
     );
@@ -88,5 +89,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     textAlign: 'center',
+    fontWeight: 'bold',
+    borderBottomColor: '#000',
+    borderBottomWidth: 2,
   },
 });
