@@ -14,7 +14,9 @@ export default function StagesStack() {
       }}
     >
       <Stack.Screen name="Stages" component={StagesScreen} />
-      <Stack.Screen name="StageDetail" component={StageDetailScreen} />
+      <Stack.Screen name="StageDetail" component={StageDetailScreen} options={({ route }) => ({
+        title: route.params?.stage?.organisation?.nom ?? 'Détail du stage',
+      })} />
     </Stack.Navigator>
   );
 }

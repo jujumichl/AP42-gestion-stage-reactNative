@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { useAuth } from '../context/AuthProvider';
-
+const username = process.env.EXPO_PUBLIC_USER;
+const mdp = process.env.EXPO_PUBLIC_USER_MDP;
 export default function ConnexionScreen() {
-    const [email, setEmail] = useState('nicolas.batauld@lycee-basch.fr'); // en dev valeur en dur
-    const [password, setPassword] = useState('passe');// en dev valeur en dur
+    const [email, setEmail] = useState(username); // en dev valeur en dur
+    const [password, setPassword] = useState(mdp);// en dev valeur en dur
     const { login } = useAuth();
 
     async function handleSignIn() {
