@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   },
   sort: {
     top: 10,
-    left: 325,
+    left: 290,
     padding: 5,
     marginBottom: 10,
     borderWidth: 2,
