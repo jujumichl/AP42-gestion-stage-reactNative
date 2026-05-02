@@ -42,8 +42,14 @@ export default function OrganisationsScreen() {
 
   const ouvrirLien = async (urlSiteWeb) => {
     if (!urlSiteWeb) return;
-    const url = urlSiteWeb;
-    await Linking.openURL(url);
+    if (urlSiteWeb.includes('https://') || urlSiteWeb.includes('http://')) {
+      console.log("url correct")
+      await Linking.openURL(urlSiteWeb);
+    }
+    else {
+      const url = "https://" + urlSiteWeb;
+      await Linking.openURL(url);
+    }
   }
 
   const renderItem = ({ item }) => (
@@ -57,14 +63,14 @@ export default function OrganisationsScreen() {
         </View>
         {item.tel ? (
           <TouchableOpacity onPress={() => appelerNumero(item.tel)}>
-            <Text style={[styles.details, { color: '#007AFF', textDecorationLine: 'underline'}]}>{item.tel}</Text>
+            <Text style={[styles.details, { color: '#007AFF', textDecorationLine: 'underline' }]}>{item.tel}</Text>
           </TouchableOpacity>
         ) : null}
         {item.urlSiteWeb ? (
           <TouchableOpacity onPress={() => ouvrirLien(item.urlSiteWeb)}>
-            <Text style={[styles.details, { color: '#007AFF', textDecorationLine: 'underline'}]}>{item.urlSiteWeb}</Text>
+            <Text style={[styles.details, { color: '#007AFF', textDecorationLine: 'underline' }]}>{item.urlSiteWeb}</Text>
           </TouchableOpacity>
-        ): null}
+        ) : null}
       </View>
     </TouchableOpacity>
   );
