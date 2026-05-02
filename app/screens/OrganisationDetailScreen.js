@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { StyleSheet, View, KeyboardAvoidingView, Text, FlatList, Button } from 'react-native';
-import HeaderInput from '../components/organisationComponents/HeaderInput';
+import { StyleSheet, View, KeyboardAvoidingView, Text, TextInput, FlatList, Button } from 'react-native';
 import ContactsOrganisation from '../components/organisationComponents/ContactsOrganisation';
 
 import { useAuth } from '../context/AuthProvider';
@@ -69,8 +68,6 @@ export default function OrganisationDetailScreen({ route }) {
       organisation.tel = unBody.tel;
       organisation.email = unBody.email;
       organisation.urlSiteWeb = unBody.urlSiteWeb;
-      // If you want to refresh contacts after update, call fetchData or similar here if needed
-      // await contactOrganisation(); // Uncomment and implement if needed
     }
     catch (error) {
       console.log(`OrganisationDetailScreen - Erreur lors de la modification de l'organisation : ${error}`);
@@ -90,10 +87,72 @@ export default function OrganisationDetailScreen({ route }) {
         keyExtractor={(item, index) => item.id?.toString() || index.toString()}
         ListHeaderComponent={
           <View>
-            <HeaderInput organisation={organisation} />
+            <View style={styles.formCard}>
+              <Text style={styles.title}>{organisation.nom}</Text>
+
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Adresse</Text>
+                <TextInput style={styles.details}
+                  placeholder="100 boulevard de l'Europe"
+                  value={rue}
+                  onChangeText={setRue}
+                />
+              </View>
+
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Code postal</Text>
+                <TextInput style={styles.details}
+                  placeholder='35200'
+                  value={codePostal}
+                  onChangeText={setCodePostal}
+                  keyboardType="numeric" // Petit bonus pour l'UX
+                />
+              </View>
+
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Ville</Text>
+                <TextInput style={styles.details}
+                  placeholder='Rennes'
+                  value={ville}
+                  onChangeText={setVille}
+                />
+              </View>
+
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Téléphone</Text>
+                <TextInput style={styles.details}
+                  placeholder='0123456789'
+                  value={tel}
+                  onChangeText={setTel}
+                  keyboardType="phone-pad" // Petit bonus pour l'UX
+                />
+              </View>
+
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Email</Text>
+                <TextInput style={styles.details}
+                  placeholder='nom.prenom@exemple.com'
+                  value={email}
+                  onChangeText={setEmail}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                />
+              </View>
+
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Url Site Web</Text>
+                <TextInput style={styles.details}
+                  placeholder='https://www.exemple.com'
+                  value={urlSiteWeb}
+                  onChangeText={setUrlSiteWeb}
+                  keyboardType="url"
+                  autoCapitalize="none"
+                />
+              </View>
+            </View>
             <Button title="Modifier" onPress={validerOrganisation} />
             <Text style={styles.titleContact}>Contacts associés</Text>
-            <ContactsOrganisation contact={Object.entries(listeContacts)}/>
+            <ContactsOrganisation contact={Object.entries(listeContacts)} />
           </View>
         }
 
@@ -158,5 +217,19 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     width: '100%',
     backgroundColor: '#f9f9f9',
-  }
+  },
+  formCard: {
+    width: '80%'
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  details: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 4,
+  },
 });
