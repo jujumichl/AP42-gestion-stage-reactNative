@@ -49,10 +49,8 @@ export default function MainTabNav() {
         component={StagesStackNav}
         options={{
           tabBarLabel: 'Stages',
-          headerShown: true,
           headerStyle: { backgroundColor: '#3b5bdb' },
           headerTintColor: '#fff',
-          headerTitle: () => <HeaderSubTitle routeName="Stages" user={user} />,
         }}
       />
       <Tab.Screen
