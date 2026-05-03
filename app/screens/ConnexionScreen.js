@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
 import { useAuth } from '../context/AuthProvider';
+const username = process.env.EXPO_PUBLIC_USER;
+const mdp = process.env.EXPO_PUBLIC_USER_MDP;
+export default function ConnexionScreen() {
+    const [email, setEmail] = useState(username); // en dev valeur en dur
+    const [password, setPassword] = useState(mdp);// en dev valeur en dur
+    const { login } = useAuth();
 
-export default function ConnexionScreen () {
-    const [email, setEmail] = useState(''); 
-    const [password, setPassword] = useState('');
-    const {login} = useAuth();
-    
     async function handleSignIn() {
         if (!email || !password) {
             alert('Veuillez entrer un email et un mot de passe');
@@ -14,7 +15,7 @@ export default function ConnexionScreen () {
         }
         try {
             await login(email, password);
-        } 
+        }
         catch (error) {
             console.log(`Erreur réseau : ${error}`);
             alert('Erreur de connexion');
@@ -28,12 +29,16 @@ export default function ConnexionScreen () {
                 style={styles.input}
                 placeholder="etudiant@gmail.com"
                 keyboardType='email-address'
+                value={email}// en dev valeur en dur
+
                 onChangeText={setEmail}
             />
             <TextInput
                 style={styles.input}
                 placeholder="Password"
                 secureTextEntry={true}
+                value={password}// en dev valeur en dur
+
                 onChangeText={setPassword}
             />
             <Pressable

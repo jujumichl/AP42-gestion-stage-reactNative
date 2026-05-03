@@ -4,6 +4,7 @@ import { TouchableOpacity, Text } from 'react-native';
 import OrganisationsStackNav from './OrganisationsStackNav';
 
 import ContactsScreen from '../screens/ContactsScreen';
+import StagesStackNav from './StagesStackNav';
 import StagesScreen from '../screens/StagesScreen';
 import ConnexionScreen from '../screens/ConnexionScreen';
 
@@ -25,12 +26,12 @@ export default function MainTabNav() {
         headerShown: false,
       }}
     >
-      <Tab.Screen
-        name="OrganisationsTab"
-        component={OrganisationsStackNav}
-        options={{
-          tabBarLabel: 'Organisations',
-        }}
+        <Tab.Screen
+          name="OrganisationsTab"
+          component={OrganisationsStackNav}
+          options={{
+            tabBarLabel: 'Organisations',
+          }}
       />
       <Tab.Screen
         name="ContactsTab"
@@ -45,13 +46,11 @@ export default function MainTabNav() {
       />
       <Tab.Screen
         name="StagesTab"
-        component={StagesScreen}
+        component={StagesStackNav}
         options={{
           tabBarLabel: 'Stages',
-          headerShown: true,
           headerStyle: { backgroundColor: '#3b5bdb' },
           headerTintColor: '#fff',
-          headerTitle: () => <HeaderSubTitle routeName="Stages" user={user} />,
         }}
       />
       <Tab.Screen

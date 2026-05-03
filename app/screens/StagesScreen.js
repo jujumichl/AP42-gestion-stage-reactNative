@@ -1,11 +1,74 @@
-import { View, Text, StyleSheet} from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useAuth } from '../context/AuthProvider';
+import { getStages } from '../api/stages';
 
-export default function StagesScreen() {   
-    return (
-    <View style={styles.container}>
-      <Text style={styles.titre}>Stages en construction !</Text>
+export default function StagesScreen() {
+  const [listeStages, setListeStages] = useState([]);
+  const navigation = useNavigation();
+  const [orderBy, setOrderBy] = useState('desc');
+  const { user } = useAuth();
+
+  function sortData(tab, order) {
+    // du plus récent au plus ancien
+    if (order.toLowerCase() == "asc") return tab.sort((a, b) => new Date(b.periodeStage.dateDebut) - new Date(a.periodeStage.dateDebut));
+
+    // du plus ancien au plus récent 
+    if (order.toLowerCase() == "desc") return tab.sort((a, b) => new Date(a.periodeStage.dateDebut) - new Date(b.periodeStage.dateDebut));
+  }
+  function changeSort() {
+    orderBy === "desc" ? setOrderBy("asc") : setOrderBy('desc');
+    setListeStages(sortData(listeStages, orderBy));
+  }
+  // callback appelée à chaque fois que l'écran reçoit le focus
+  useFocusEffect(
+    React.useCallback(() => {
+      async function fetchData() {
+        const token = user.token;
+        try {
+          let body = await getStages(token);
+          setListeStages(sortData(body.data, orderBy));
+        }
+        catch (error) {
+          console.log(`StagesScreen - Erreur lors de la récupération des stages : ${error}`);
+          if (error.cause === 401) {
+            alert(`Connexion échue. Il faut vous reconnecter`);
+            logout();
+          }
+        }
+      }
+
+
+      fetchData();
+      // Optionnel : une fonction de nettoyage si nécessaire
+      return () => { };
+    }, [])
+  );
+
+  const renderItem = ({ item }) => (
+    <TouchableOpacity onPress={() => navigation.navigate('StageDetail', { stage: item })}>
+      <View style={styles.card}>
+        <Text style={styles.nom}>{item.organisation.nom} - {item.organisation.ville}</Text>
+        <Text style={styles.details}>{item.descriptifMissions ?? null}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+
+
+  return (
+    <View>
+      <TouchableOpacity onPress={() => changeSort()}>
+        <Text style={styles.sort}>Sort: {orderBy}</Text>
+      </TouchableOpacity>
+      <FlatList
+        data={listeStages}
+        keyExtractor={item => item.id}
+        renderItem={renderItem}
+        contentContainerStyle={{ paddingBottom: 20 }}
+      />
     </View>
-    );
+  );
 };
 
 const styles = StyleSheet.create({
@@ -14,9 +77,35 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 8,
   },
-  titre: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    color: '#97043cff',
+  card: {
+    flexDirection: 'column',
+    backgroundColor: '#F5F5F5',
+    borderRadius: 10,
+    marginVertical: 8,
+    padding: 10,
+    elevation: 2,
   },
+  nom: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  details: {
+    fontSize: 12,
+    color: '#666',
+  },
+  sort: {
+    top: 10,
+    left: 290,
+    padding: 5,
+    marginBottom: 10,
+    borderWidth: 2,
+    borderColor: '#000000',
+    backgroundColor: '#ffffff',
+    textAlign: 'center',
+    fontSize: 15,
+    alignItems: 'left',
+    borderRadius: 8,
+    width: 85,
+  }
 });
