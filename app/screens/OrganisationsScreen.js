@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Linking } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '../context/AuthProvider';
 import { getOrganisations } from '../api/organisations';
@@ -35,6 +35,24 @@ export default function OrganisationsScreen() {
     }, [])
   );
 
+  const appelerNumero = async (numero) => {
+    if (!numero) return;
+    const url = `tel:${numero}`;
+    await Linking.openURL(url);
+  };
+
+  const ouvrirLien = async (urlSiteWeb) => {
+    if (!urlSiteWeb) return;
+    if (urlSiteWeb.includes('https://') || urlSiteWeb.includes('http://')) {
+      console.log("url correct")
+      await Linking.openURL(urlSiteWeb);
+    }
+    else {
+      const url = "https://" + urlSiteWeb;
+      await Linking.openURL(url);
+    }
+  }
+
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => navigation.navigate('OrganisationDetail', { organisation: item })}>
       <View style={styles.card}>
@@ -44,7 +62,16 @@ export default function OrganisationsScreen() {
           <Text style={styles.details}>{item.rue}</Text>
           <Text style={styles.details}>{item.codePostal}</Text>
         </View>
-        <Text style={styles.details}>{item.tel}</Text>
+        {item.tel ? (
+          <TouchableOpacity onPress={() => appelerNumero(item.tel)}>
+            <Text style={[styles.details, { color: '#007AFF', textDecorationLine: 'underline' }]}>{item.tel}</Text>
+          </TouchableOpacity>
+        ) : null}
+        {item.urlSiteWeb ? (
+          <TouchableOpacity onPress={() => ouvrirLien(item.urlSiteWeb)}>
+            <Text style={[styles.details, { color: '#007AFF', textDecorationLine: 'underline' }]}>{item.urlSiteWeb}</Text>
+          </TouchableOpacity>
+        ) : null}
       </View>
     </TouchableOpacity>
   );
@@ -77,19 +104,20 @@ const styles = StyleSheet.create({
   },
   nom: {
     fontSize: 18,
-    width: 200,
+    width: 230,
     fontWeight: 'bold',
     marginBottom: 4,
   },
   adresse: {
     position: 'absolute',
     marginTop: 25,
-    marginLeft: 230,
-    width: 80,
+    marginLeft: 250,
+    width: 70,
   },
   details: {
     fontSize: 12,
     width: 150,
     color: '#666',
+    marginTop: 3,
   },
 });

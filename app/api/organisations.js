@@ -20,6 +20,25 @@ export async function getOrganisations(token) {
     return body;
 }
 
+export async function getOrganisationContacts(token, id) {
+    const settings = {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        }
+    }
+    console.log(`API : GET ${monUrlBase}/organisations/${id}/contacts - ` + JSON.stringify(settings));
+    let response = await fetch(`${monUrlBase}/organisations/${id}/contacts`, settings);
+    console.log(`API : GET ${monUrlBase}/organisations/${id}/contacts - code statut ${response.status}`);
+
+    const body = await response.json();
+    if (!response.ok) {
+        console.log(`API : GET ${monUrlBase}/organisations/${id}/contacts - code statut ${response.status} - ${body?.message ?? 'Pas de message'}`);
+        throw new Error(`Erreur réseau API contacts - code statut ${response.status}`, {cause : response.status});
+    }
+    return body;
+};
+
 export async function putOrganisation(token, id, unBody) {
     let settings = {
         method: 'PUT',
