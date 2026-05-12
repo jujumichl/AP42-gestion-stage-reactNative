@@ -37,3 +37,25 @@ export async function getContactsOrganisation(token, idOragnisation) {
     }
     return body;
 }
+
+export async function postContactOragnisation(token, unBody) {
+    let settings = {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(unBody)
+    }
+
+    console.log(`API : POST ${monUrlBase}/contact - ` + JSON.stringify(settings));
+    let response = await fetch(`${monUrlBase}/contact`, settings);
+    console.log(`API : POST ${monUrlBase}/contact - code statut ${response.status}`);
+    const body = await response.json();
+    if (!response.ok) {
+        console.log(`API : POST ${monUrlBase}/contact - code statut ${response.status} - ${body?.message ?? 'Pas de message'}`);
+        throw new Error(`Erreur réseau API contact - code statut ${response.status}`, {cause : response.status});
+    }    
+
+    return body;
+}
