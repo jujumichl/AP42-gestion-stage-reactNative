@@ -12,10 +12,10 @@ export default function StagesScreen() {
 
   function sortData(tab, order) {
     // du plus récent au plus ancien
-    if (order.toLowerCase() == "asc") return tab.sort((a, b) => new Date(b.periodeStage.dateDebut) - new Date(a.periodeStage.dateDebut));
+    if (order.toLowerCase() == "asc") return tab.sort((a, b) => new Date(b.periode.dateDebut) - new Date(a.periode.dateDebut));
 
     // du plus ancien au plus récent 
-    if (order.toLowerCase() == "desc") return tab.sort((a, b) => new Date(a.periodeStage.dateDebut) - new Date(b.periodeStage.dateDebut));
+    if (order.toLowerCase() == "desc") return tab.sort((a, b) => new Date(a.periode.dateDebut) - new Date(b.periode.dateDebut));
   }
   function changeSort() {
     orderBy === "desc" ? setOrderBy("asc") : setOrderBy('desc');

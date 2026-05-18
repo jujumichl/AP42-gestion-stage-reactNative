@@ -2,14 +2,14 @@ import { useState } from 'react';
 import { View, Text, StyleSheet } from "react-native";
 
 export default function HeaderStagesDetail({ stage }) {
-    const [dateDebut, setDateDebut] = useState(formatDateFR(String(stage.periodeStage.dateDebut.split("T", 1))));
-    const [dateFin, setDateFin] = useState(formatDateFR(String(stage.periodeStage.dateFin.split("T", 1))));
+    const [dateDebut, setDateDebut] = useState(formatDateFR(String(stage.periode.dateDebut.split("T", 1))));
+    const [dateFin, setDateFin] = useState(formatDateFR(String(stage.periode.dateFin.split("T", 1))));
 
     function formatDateFR(date) {
     let j = date.split("-")[2];
     let m = date.split("-")[1];
     let a = date.split("-")[0];
-    return `${j}-${m}-${a}`;
+    return `${j}/${m}/${a}`;
     }
     return (
         <View style={styles.formCard}>
