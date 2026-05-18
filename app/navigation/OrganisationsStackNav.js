@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import OrganisationsScreen from "../screens/OrganisationsScreen";
 import OrganisationDetailScreen from "../screens/OrganisationDetailScreen";
+import AjouterContactScreen from "../screens/AjouterContactScreen"
 import HeaderSubTitle from '../components/headerTitle';
 import { useAuth } from '../context/AuthProvider';
 
@@ -21,6 +22,7 @@ export default function OrganisationsStack() {
     >
       <Stack.Screen name="Organisations" component={OrganisationsScreen} />
       <Stack.Screen name="OrganisationDetail" component={OrganisationDetailScreen} />
+      <Stack.Screen name="AjouterContactScreen" component={AjouterContactScreen} />
     </Stack.Navigator>
   );
 }

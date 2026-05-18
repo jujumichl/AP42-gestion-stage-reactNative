@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { StyleSheet, View, KeyboardAvoidingView, Text, TextInput, FlatList, Button } from 'react-native';
 import ContactsOrganisation from '../components/organisationComponents/ContactsOrganisation';
 
@@ -9,6 +9,7 @@ import { getContactsOrganisation } from '../api/contacts';
 
 export default function OrganisationDetailScreen({ route }) {
   const [listeContacts, setListeContacts] = useState([]);
+  const navigation = useNavigation();
   const organisation = route.params.organisation;
   const [rue, setRue] = useState(organisation.rue);
   const [ville, setVille] = useState(organisation.ville);
@@ -159,6 +160,7 @@ export default function OrganisationDetailScreen({ route }) {
         ListEmptyComponent={<Text style={styles.details}>Aucun contact trouvé.</Text>}
         contentContainerStyle={styles.container} // Le style s'applique ici maintenant
       />
+      <Button title='Ajouter un contact' onPress={() => navigation.navigate('AjouterContactScreen', { organisation })} />
     </KeyboardAvoidingView>
   );
 }
